@@ -1,0 +1,785 @@
+21:#include "ch.h"
+22:#include "hal.h"
+23:#include "chprintf.h"
+24:#include "nanovna.h"
+30:#pragma GCC optimize ("Os")
+102:  plot_printf(kp_buf, sizeof(kp_buf), "%s", text);
+480:  ili9341_drawstring("TOUCH UPPER LEFT", 40, 40);
+490:  ili9341_drawstring("TOUCH LOWER RIGHT", LCD_WIDTH-17*(FONT_WIDTH)-30, LCD_HEIGHT-FONT_GET_HEIGHT-35);
+533:  lcd_printf((LCD_WIDTH-18*FONT_WIDTH)/2, (LCD_HEIGHT-FONT_GET_HEIGHT)/2, "TOUCH %s *", name);
+549:  getTouchPoint(x1, y1, "UPPER LEFT", &config.touch_cal[p1]);
+550:  getTouchPoint(x2, y2, "LOWER RIGHT", &config.touch_cal[p2]);
+565:  ili9341_drawstring("TOUCH PANEL, DRAW LINES, PRESS BUTTON TO FINISH", OFFSETX, LCD_HEIGHT - FONT_GET_HEIGHT);
+572:      lcd_printf(120, 120, "STATE: % 4d ", button_state);
+601:  ili9341_drawstring("TOUCH PANEL TO DRAW, PRESS JOG BUTTON TO CLEAR, RESTART TO EXIT", OFFSETX, LCD_HEIGHT - FONT_GET_HEIGHT);
+621:    ili9341_drawstring("TOUCH PANEL TO DRAW, PRESS JOG BUTTON TO CLEAR, RESTART TO EXIT", OFFSETX, LCD_HEIGHT - FONT_GET_HEIGHT);
+677:    ili9341_drawstring("ESD protected", x, y+=FONT_STR_HEIGHT + 2);
+692:  lcd_printf(x, y+=bFONT_STR_HEIGHT, "HW Version:%s (%d) %s", get_hw_version_text(), adc1_single_read(0), (si5351_available?"SI5351":""));
+710:    lcd_printf(x, y+=bFONT_STR_HEIGHT, "%08x|%08x|%08x|%08x|%4u|%4u|%9s|%12s",
+735:    lcd_printf(x, y, "Time: 20%02d/%02d/%02d %02d:%02d:%02d" " (LS%c)",
+746:    lcd_printf(x, y + bFONT_STR_HEIGHT + 1, "Batt: %d.%03dV", vbat/1000, vbat%1000);
+762:  ili9341_drawstring_7x13("DFU: Device Firmware Update Mode\n"
+763:                          "To exit DFU mode, please reset device yourself.", x, y);
+1487:[KM_START]        = {keypads_freq        , "START"}, // start
+1488:[KM_STOP]         = {keypads_freq        , "STOP"}, // stop
+1489:[KM_CENTER]       = {keypads_freq        , "CENTER"}, // center
+1490:[KM_SPAN]         = {keypads_freq        , "SPAN"}, // span
+1491:[KM_CW]           = {keypads_freq        , "FREQ"}, // cw freq
+1492:[KM_REFLEVEL]     = {keypads_plusmin_unit, "REF\nLEVEL"}, // reflevel #5
+1493:[KM_SCALE]        = {keypads_pos_unit    , "SCALE"}, // scale
+1494:[KM_ATTENUATION]  = {keypads_positive    , "ATTENUATE"}, // attenuation
+1495:[KM_ACTUALPOWER]  = {keypads_plusmin_unit, "ACTUAL\nPOWER"}, // actual power
+1496:[KM_IF]           = {keypads_freq        , "IF"}, // IF
+1497:[KM_SAMPLETIME]   = {keypads_positive    , "SAMPLE\nDELAY"}, // sample delay #10
+1498:[KM_LOWOUTLEVEL]  = {keypads_plusmin     , "OUTPUT\nLEVEL"},    // KM_LOWOUTLEVEL
+1499:[KM_DECAY]        = {keypads_positive    , "DECAY"},    // KM_DECAY
+1500:[KM_NOISE]        = {keypads_positive    , "NOISE\nLEVEL"},    // KM_NOISE
+1502:[KM_FREQ_CORR]    = {keypads_plusmin_freq, "PPB"},    // KM_FREQ_CORR
+1504:[KM_10MHZ]        = {keypads_freq        , "FREQ"},    // KM_10MHz
+1506:[KM_REPEAT]       = {keypads_positive    , "SAMPLE\nREPEAT"},    // KM_REPEA #15
+1507:[KM_EXT_GAIN]     = {keypads_plusmin     , "EXT\nGAIN"},    // KM_EXT_GAIN
+1508:[KM_TRIGGER]      = {keypads_plusmin_unit, "LEVEL"},    // KM_TRIGGER
+1509:[KM_LEVELSWEEP]   = {keypads_plusmin     , "LEVEL\nSWEEP"},    // KM_LEVELSWEEP
+1510:[KM_SWEEP_TIME]   = {keypads_time        , "SWEEP\nSECONDS"},    // KM_SWEEP_TIME
+1511:[KM_OFFSET_DELAY] = {keypads_positive    , "OFFSET\nDELAY"}, // KM_OFFSET_DELAY #20
+1512:[KM_FAST_SPEEDUP] = {keypads_positive    , "NARROW\nSPEEDUP"}, // KM_FAST_SPEEDUP
+1513:[KM_FASTER_SPEEDUP] = {keypads_positive  , "WIDE\nSPEEDUP"}, // KM_FAST_SPEEDUP
+1514:[KM_GRIDLINES]    = {keypads_positive    , "MINIMUM\nGRIDLINES"}, // KM_GRIDLINES
+1515:[KM_MARKER]       = {keypads_freq        , "MARKER\nFREQ"}, // KM_MARKER
+1516:[KM_MODULATION]   = {keypads_positive    , "MODULATION\nFREQ"}, // KM_MODULATION
+1517:[KM_HIGHOUTLEVEL] = {keypads_plusmin     , "OUTPUT\nLEVEL"},    // KM_HIGHOUTLEVEL #25
+1519:[KM_COR_AM]       = {keypads_plusmin     , "COR\nAM"},    // KM_COR_AM
+1520:[KM_COR_WFM]      = {keypads_plusmin     , "COR\nWFM"},    // KM_COR_WFM
+1521:[KM_COR_NFM]      = {keypads_plusmin     , "COR\nNFM"},    // KM_COR_NFM
+1522:[KM_DEVIATION]    = {keypads_freq        , "DEVIATION"}, // KM_DEVIATION
+1523:[KM_DEPTH]        = {keypads_positive    , "DEPTH%"}, // KM_DEPTH
+1524:[KM_IF2]          = {keypads_freq        , "IF2"}, // KM_IF2
+1525:[KM_R]            = {keypads_plusmin     , "R"}, // KM_R    #30
+1526:[KM_MOD]          = {keypads_positive    , "MODULO"}, // KM_MOD
+1527:[KM_CP]           = {keypads_positive    , "CP"}, // KM_CP
+1529:[KM_ATTACK]       = {keypads_positive    , "ATTACK"},    // KM_ATTACK
+1531:[KM_ULTRA_START]  = {keypads_freq        , "ULTRA\nSTART"}, // KM_ULTRA_START
+1532:[KM_HARM_START]   = {keypads_freq        , "HARM\nSTART"}, // KM_HARM_START
+1535:[KM_EXP_AVER]     = {keypads_positive    , "EXPONENTIAL\nAVERAGING"}, //KM_EXP_AVER
+1537:[KM_LEVEL]        = {keypads_plusmin     , "LEVEL"}, // KM_LEVEL
+1539:[KM_LIMIT_FREQ]   = {keypads_freq         , "FREQ"},  // KM_LIMIT_FREQ
+1540:[KM_LIMIT_LEVEL]  = {keypads_plusmin_unit , "LEVEL"},  // KM_LIMIT_LEVEL
+1543:[KM_BAND_START]  = {keypads_freq         , "START\nFREQ"},  // KM_BAND_START
+1544:[KM_BAND_END]    = {keypads_freq         , "STOP\nFREQ"},  // KM_BAND_END
+1545:[KM_BAND_CENTER]  = {keypads_freq         , "CENTER\nFREQ"},  // KM_BAND_CENTER
+1546:[KM_BAND_SPAN]   = {keypads_freq         , "SPAN\nFREQ"},  // KM_BAND_SPAN
+1547:[KM_BAND_LEVEL]  = {keypads_plusmin_unit , "LEVEL"},  // KM_BAND_LEVEL
+1548:[KM_BAND_NAME]   = {keypads_text ,          "NAME"},  // KM_BAND_NAME
+1550:[KM_MARKER_TIME]  = {keypads_time        , "MARKER\nTIME"}, // KM_MARKER_TIME
+1551:[KM_VAR]          = {keypads_freq        , "JOG\nSTEP"}, // jog step
+1553:[KM_NF]           = {keypads_plusmin     , "NOISE\nFIGURE"}, // noise figure of tinySA
+1555:[KM_LINEAR_SCALE] = {keypads_plusmin     , "SCALE"}, // scale for linear units
+1557:[KM_DIRECT_START] = {keypads_freq        , "DIRECT\nSTART"}, // KM_DIRECT_START
+1558:[KM_DIRECT_STOP]  = {keypads_freq        , "DIRECT\nSTOP"}, // KM_DIRECT_STOP
+1559:[KM_OVERCLOCK]       = {keypads_freq        , "OVERCLOCK"},       // KM_OVERCLOCK
+1561:[KM_RTC_DATE]     = {keypads_positive    , "SET DATE\n YYMMDD"}, // Date
+1562:[KM_RTC_TIME]     = {keypads_positive    , "SET TIME\n HHMMSS"}, // Time
+1563:[KM_INTERVAL]     = {keypads_positive    , "SET INTERVAL\n HHMMSS"}, // Interval
+1565:[KM_PRESET_NAME]   = {keypads_text ,          "NAME"},  // KM_PRESET_NAME
+1567:[KM_CODE]         = {keypads_positive    , "CODE"},              // KM_CODE
+1569:[KM_FILENAME]     = {keypads_text        , "NAME"},  // filename
+1571:[KM_TRIGGER_GRID] = {keypads_time        , "INTERVAL"},              // KM_CODE
+1645:  drawMessageBox("Error", (max2871?"First calibrate 100kHz to 7.25GHz input":"First calibrate 100kHz to 5.34GHz input"), 2000);
+1654:  drawMessageBox("Error", "First calibrate 30MHz output", 2000);
+1669:    kp_help_text = "Internals access code";
+1687:      plot_printf(b->text, sizeof b->text, "SW:%3.2fMHz %+ddB %.3Fs",
+1693:      plot_printf(b->text, sizeof b->text, "SWEEP: OFF");
+1707:        plot_printf(b->text, sizeof b->text, "STOP %5.3QHz %+.1fdBm", getFrequency(current_index), current_level);
+1709:        plot_printf(b->text, sizeof b->text, "STOP SWEEP");
+1712:      plot_printf(b->text, sizeof b->text, "START SWEEP");
+1730:    plot_printf(b->text, sizeof b->text, "%8.3QHz %+4.1fdB",
+1755:    plot_printf(uistat.text, sizeof uistat.text, "Level of %.3QHz output",
+1793:    plot_printf(uistat.text, sizeof uistat.text, "Level of %.3QHz output",
+1877:  kp_help_text = "Enter actual input level";
+1896:  kp_help_text = "Enter actual input level";
+1914:  kp_help_text = "Enter actual input level";
+1930:  kp_help_text = "Enter actual input level";
+1946:  kp_help_text = "Enter actual input level";
+1962:  kp_help_text = "Enter actual input level";
+1978:  kp_help_text = "Enter actual input level";
+1994:  kp_help_text = "Enter actual input level";
+2069:  kp_help_text = "Enter actual level of 30MHz output";
+2103:  kp_help_text = "Enter actual level of 1GHz output";
+2138:  kp_help_text = "Enter actual level of 1.2GHz output";
+2166:      b->param_1.text = "Return";
+2171:      b->param_1.text = "Switch";
+2205:        plot_printf(b->text, sizeof(b->text), "LOAD\n\b%s", p->preset_name);
+2208:        plot_printf(b->text, sizeof(b->text), "%.6FHz\n%.6FHz", (float)p->frequency0, (float)p->frequency1);
+2210:      plot_printf(b->text, sizeof(b->text), "EMPTY %d", (int)data);
+2229:        plot_printf(b->text, sizeof(b->text), "STORE\n\b%s", p->preset_name);
+2232:        plot_printf(b->text, sizeof(b->text), "%.6FHz\n%.6FHz", (float)p->frequency0, (float)p->frequency1);
+2234:      plot_printf(b->text, sizeof(b->text), "STORE %d", (int)data);
+2249:    kp_help_text = "Preset name";
+2262:  sd_card_load_config("config.ini");
+2288:  kp_help_text = "Enter scale";
+2304:    plot_printf(uistat.text, sizeof uistat.text, "%.3Q", (config.harmonic_start?config.harmonic_start:ULTRA_MAX_FREQ));
+2316:    plot_printf(uistat.text, sizeof uistat.text, "%.3Q", (config.harmonic_start?config.harmonic_start:ULTRA_MAX_FREQ));
+2464:      plot_printf(mode_string, sizeof mode_string, "%s%s%s%s%s",
+2466:                  (get_sweep_frequency(ST_START) < MINIMUM_DIRECT_FREQ ? " SINE" : "" ),
+2467:                  (get_sweep_frequency(ST_STOP) >= MINIMUM_DIRECT_FREQ ? " SQUARE WAVE" : ""),
+2468:                  (get_sweep_frequency(ST_STOP) > MAX_LOW_OUTPUT_FREQ && setting.mixer_output ? " MIXER" : ""),
+2469:                  (LO_harmonic ? " HARM" : "")
+2498:{  "None", "AM 30%",
+2500:   "FM 2.5kHz",
+2501:   "FM 3kHz",
+2502:   "FM 5kHz",
+2504:   "FM 3kHz",
+2506:   "FM 75kHz", "External"};
+2512:    plot_printf(b->text, sizeof b->text, "%s", menu_modulation_text[data]);
+2559:      plot_printf(b->text, sizeof b->text, "MOD: %s", menu_modulation_text[setting.modulation]);
+2563:        plot_printf(b->text, sizeof b->text, "MOD: %8.4FHz AM %d%%", setting.modulation_frequency, setting.modulation_depth_x100);
+2565:        plot_printf(b->text, sizeof b->text, "MOD: %8.4FHz FM %4QHz", setting.modulation_frequency, (freq_t)(setting.modulation_deviation_div100*100));
+2567:      plot_printf(b->text, sizeof b->text, "MOD: %4dHz %s", (int)(setting.modulation_frequency), menu_modulation_text[setting.modulation]);
+2576:const char *const menu_reffer_text[]={"关闭","30MHz","15MHz","10MHz","4MHz","3MHz","2MHz","1MHz"};
+2657:      b->param_1.text = "SPUR\nREMOVAL";
+2660:      b->param_1.text = "MIRROR\nMASKING";
+2858:    drawMessageBox("Info", "Visit tinysa.org/ultra for unlock code", 2000);
+2860:    kp_help_text = "Ultra unlock code";
+2896:  kp_help_text = "Clear unlock code";
+2899:    drawMessageBox("Error", "Incorrect code, use 1234", 2000);
+2922:const char * const averageText[] = { "关闭", "MINH", "MAXH", "MAXD", " AVER4", "A16", "平均", "QUASI", "TABLE", "反卷积"};
+2939:      drawMessageBox("Error", "Incorrect input", 2000);
+2962:      kp_help_text = "Frequency of fundamental";
+2966:      kp_help_text = "Span (0=full span)";
+2997:      kp_help_text = "Frequency of left signal";
+3000:      kp_help_text = "Right signal";
+3020:      kp_help_text = "Frequency of signal";
+3022:      kp_help_text = "Frequency offset";
+3031:      kp_help_text = "Frequency of signal";
+3033:      kp_help_text = "Bandwidth";
+3044://      kp_help_text = "Frequency of signal";
+3046://      kp_help_text = "Width of signal";
+3057:      kp_help_text = "dBc";
+3085:      kp_help_text = "Frequency of signal";
+3091:      kp_help_text = "Modulation frequency: 500hz .. 10kHz";
+3093:      kp_help_text = "Modulation frequency: 3 .. 10kHz";
+3120:      kp_help_text = "Frequency of signal";
+3124:      kp_help_text = "Modulation frequency: 50Hz .. 20kHz";
+3130:      kp_help_text = "Modulation frequency: 1 .. 2.5kHz";
+3138:      kp_help_text = "Frequency deviation: 3 .. 500kHz";
+3141:      kp_help_text = "Frequency deviation: 500Hz .. 500kHz";
+3158:      kp_help_text = "Channel frequency";
+3160:      kp_help_text = "Channel width";
+3179:        drawMessageBox("Error", "NF out of range",1000);
+3192:      kp_help_text = "Amplifier Gain ";
+3203:        kp_help_text = "Noise center frequency";
+3207:        kp_help_text = "Noise span";
+3250:      b->param_1.text = "0dB";
+3254:      b->param_1.text = "自动";
+3318:          format = "LEVEL\n\bMULTI";
+3320:          format = "LEVEL\n\b%.3F%s"; // 5 characters incl u, m, etc...
+3322:          format = "LEVEL\n\b%.1f%s";
+3325:        plot_printf(b->text, sizeof(b->text), "LEVEL\n\bTRACE %d", setting.trigger_trace+1);
+3374:    drawMessageBox("Error", "Disable normalization first", 2000);
+3398:    plot_printf(b->text, sizeof(b->text), S_RARROW"轨迹 %d", data+1);
+3414:      plot_printf(b->text, sizeof(b->text), "SUBTRACT\nTRACE %d", data);
+3418:      plot_printf(b->text, sizeof(b->text), "SUBTRACT\nOFF");
+3444:        plot_printf(b->text, sizeof(b->text), "SUBTRACT\nTRACE %d", setting.subtract[current_trace]);
+3447:        plot_printf(b->text, sizeof(b->text), "SUBTRACT\nOFF");
+3457:      plot_printf(b->text, sizeof(b->text), "CALC\n%s", averageText[setting.average[current_trace]]);
+3474:        drawMessageBox("Trace", "Enable at least one trace", 2000);
+3492://        kp_help_text = "Ref level";
+3522:      plot_printf(b->text, sizeof(b->text), "SINGLE\nSWEEP");
+3525:      plot_printf(b->text, sizeof(b->text), "WATER\nFALL");
+3529:    plot_printf(b->text, sizeof(b->text), "WATER\nFALL");
+3579:    plot_printf(b->text, sizeof(b->text), "%.6FHz\n%.2F%s", (float)setting.limits[current_trace][data].frequency, value(setting.limits[current_trace][data].level),unit_string[setting.unit]);
+3602:      plot_printf(b->text, sizeof(b->text), "%s", setting.bands[data].name);
+3604:      plot_printf(b->text, sizeof(b->text), "%.6FHz\n%.6FHz", (float)setting.bands[data].start, (float)setting.bands[data].end);
+3777:    drawMessageBox("Error", "At least one entry",1000);
+3799:    drawMessageBox("Error", "At least one entry",1000);
+3817:static const char* rbwsel_text[]={"自动","200","1k","3k","10k","30k","100k","300k","600k","850k"};
+3823://static const char* vbwsel_text[]={"自动","0.01","0.03", "0.1", "0.3","   "};
+3885:const char *mode_text[] = {"PRE","POST","MID"};
+3897:      b->param_1.text = setting.trigger_direction == T_UP ? "UP" : "DOWN";
+4027:  lcd_printf(LCD_WIDTH/2-8*bFONT_WIDTH, LCD_HEIGHT/2-13, "BRIGHTNESS %3d%% ", value);
+4028:  lcd_printf(LCD_WIDTH/2-11*bFONT_WIDTH, LCD_HEIGHT/2+2, S_LARROW " USE LEVELER BUTTON " S_RARROW);
+4037:        lcd_printf(LCD_WIDTH/2-8*bFONT_WIDTH, LCD_HEIGHT/2-13, "BRIGHTNESS %3d%% ", value);
+4083:    kp_help_text = "Level";
+4183:      kp_help_text = "Actual start frequency";
+4191:      kp_help_text = "Actual center frequency";
+4226:    b->param_1.text = setting.mute ? "关闭" : "ON";
+4237:    b->param_1.text = FREQ_IS_CW() ? "TIME" : "FREQUENCY";
+4364:  [FMT_BMP_FILE] = "bmp",
+4365:  [FMT_CSV_FILE] = "csv",
+4367:  [FMT_BIN_FILE] = "bin",
+4369:  [FMT_CMD_FILE] = "cmd",
+4370:  [FMT_CFG_FILE] = "cfg",
+4371:  [FMT_PRS_FILE] = "prs",
+4372:  [FMT_TBL_FILE] = "tbl",
+4373:  [FMT_BND_FILE] = "bnd",
+4412:    error = "busy, try again";
+4414:    error = "no SD card";
+4421:      error = "SD card error";
+4428:    lcd_printf(x, y, "USB DISK: %s", error);
+4429:    lcd_printf(x, y + 2*bFONT_STR_HEIGHT, "Touch screen or press to continue");
+4431:    lcd_printf(x, y, "USB DISK MODE");
+4433:    lcd_printf(x, y, "The SD card (%d MB) is a USB drive on the PC.", (int)(blocks / 2048));
+4435:    lcd_printf(x, y, "Measurements are stopped.");
+4437:    lcd_printf(x, y, "Eject the drive on the PC,");
+4439:    lcd_printf(x, y, "then touch the screen or press to exit.");
+4533:#include "vna_browser.c"
+4540:  { MT_CANCEL,   0, S_LARROW" 返回", NULL },
+4546:  { MT_ADV_CALLBACK, 0,  "STORE AS\nSTARTUP",menu_store_preset_acb},
+4549:  { MT_CALLBACK,    FMT_PRS_FILE,   "存储\n"S_RARROW"SD",     menu_sdcard_cb},
+4551:  { MT_ADV_CALLBACK, 100,"FACTORY\nDEFAULTS",menu_store_preset_acb},
+4557:  { MT_ADV_CALLBACK,            0,                          "LOAD\nSTARTUP", menu_load_preset_acb},
+4559:  { MT_ADV_CALLBACK,            101,                        "LOAD\nDEFAULTS",menu_store_preset_acb},
+4560:  { MT_ADV_CALLBACK,            _MODE_DONT_SAVE_STATE,      "SAVE\nSETTINGS",   menu_save_state_acb},
+4562:  { MT_CALLBACK, FMT_PRS_FILE, "LOAD FROM\n SD",            menu_sdcard_browse_cb },
+4564:  { MT_SUBMENU,                 0,                          "存储"  ,       menu_store_preset},
+4569:  { MT_ADV_CALLBACK, 4, "自动",     menu_mixer_drive_acb},
+4570:  { MT_ADV_CALLBACK, 3, "%+ddBm",   menu_mixer_drive_acb},
+4571:  { MT_ADV_CALLBACK, 2, "%+ddBm",   menu_mixer_drive_acb},
+4572:  { MT_ADV_CALLBACK, 1, "%+ddBm",   menu_mixer_drive_acb},
+4573:  { MT_ADV_CALLBACK, 0, "%+ddBm",   menu_mixer_drive_acb},
+4578:  { MT_ADV_CALLBACK, 15, "%+ddBm",   menu_lo_drive_acb},
+4579:  { MT_ADV_CALLBACK, 14, "%+ddBm",   menu_lo_drive_acb},
+4580:  { MT_ADV_CALLBACK, 13, "%+ddBm",   menu_lo_drive_acb},
+4581:  { MT_ADV_CALLBACK, 12, "%+ddBm",   menu_lo_drive_acb},
+4587:  { MT_FORM | MT_TITLE,    0,  "调制",NULL},
+4589:  { MT_FORM | MT_ADV_CALLBACK | MT_LOW, MO_AM,      "AM",    menu_modulation_acb},
+4591:  { MT_FORM | MT_ADV_CALLBACK, MO_WFM,              "FM",               menu_modulation_acb},
+4592:  { MT_FORM | MT_KEYPAD,   KM_MODULATION,           "频率：%s",         "1Hz..3.5kHz"},
+4593:  { MT_FORM | MT_KEYPAD,   KM_DEPTH,               "AM 深度：%s%%",         "0..100"},
+4594:  { MT_FORM | MT_KEYPAD,   KM_DEVIATION,            "FM 偏移：%s",         "1kHz..300kHz"},
+4595:  { MT_FORM | MT_ADV_CALLBACK, 0,                   "CTCSS + 1 kHz", menu_audible_harmonic},
+4602:  { MT_FORM | MT_KEYPAD,   KM_MODULATION,           "频率：%s",         "1Hz..5kHz"},
+4604:  { MT_FORM | MT_ADV_CALLBACK, 0,                   "Level in dBuV", menu_level_in_dBuV},
+4609:  { MT_FORM | MT_KEYPAD,   KM_SPAN,             "扫宽：%s",         VARIANT("0..350MHz", range_text)},
+4610:  { MT_FORM | MT_KEYPAD | MT_LOW, KM_LEVELSWEEP,"电平变化：%s", VARIANT("-70..70","-90..90")},
+4611:  { MT_FORM | MT_KEYPAD,   KM_SWEEP_TIME,       "扫描时间：%s",   "0..600 seconds"},
+4612:  { MT_FORM | MT_SUBMENU,  0,                   "扫描点数",   menu_sweep_points_form},
+4617:  { MT_FORM | MT_ADV_CALLBACK,  0,              "最干净信号，最高4.4GHz",       menu_lowoutput_settings_acb},
+4618:  { MT_FORM | MT_ADV_CALLBACK,  1,              "最高精度，最高5.4GHz",    menu_lowoutput_settings_acb},
+4619:  { MT_FORM | MT_SUBMENU,  255, S_RARROW"配置", menu_config},
+4624:  { MT_FORM | MT_ADV_CALLBACK,  0,              "Cleanest signal, max 6.3GHz",       menu_lowoutput_settings_acb},
+4625:  { MT_FORM | MT_ADV_CALLBACK,  1,              "Highest accuracy, max 7.3GHz",    menu_lowoutput_settings_acb},
+4626:  { MT_FORM | MT_SUBMENU,  255, S_RARROW"配置", menu_config},
+4632:char center_text[18] = "频率：%s";
+4635:  { MT_FORM | MT_ADV_CALLBACK, 0,               "LOW OUTPUT            %s", menu_outputmode_acb},
+4636://  { MT_FORM | MT_ADV_CALLBACK,  0,              "MOD: %s",   menu_smodulation_acb},
+4637:  { MT_FORM | MT_KEYPAD,   KM_CENTER,           center_text,         VARIANT("10kHz..350MHz","10kHz..850MHz")},
+4638:  { MT_FORM | MT_KEYPAD,   KM_LOWOUTLEVEL,      "电平：%s",        low_level_help_text},
+4644:  { MT_FORM | MT_KEYPAD,  KM_EXT_GAIN,            "外部增益：%s",   "-100..+100"},
+4646:  { MT_FORM | MT_ADV_CALLBACK,  255, "输出：%s",     menu_lowoutput_settings_acb},
+4648:  { MT_FORM | MT_CANCEL,   0,                   "模式",             NULL },
+4653:  { MT_FORM | MT_ADV_CALLBACK,  0,      "HIGH OUTPUT           %s", menu_outputmode_acb},
+4654:  { MT_FORM | MT_KEYPAD,    KM_CENTER,  center_text,         VARIANT("240MHz..959MHz",range_text)},
+4655:  { MT_FORM | MT_KEYPAD,   KM_HIGHOUTLEVEL,      "电平：%s",        low_level_help_text /* "-76..-6" */},
+4661:  { MT_FORM | MT_KEYPAD,  KM_EXT_GAIN,            "外部增益：%s",          "-100..+100"},
+4663:  { MT_FORM | MT_SUBMENU,  255, S_RARROW" 设置", menu_settings3},
+4665:  { MT_FORM | MT_CANCEL,    0,          "模式",             NULL },
+4670:  { MT_ADV_CALLBACK, AV_OFF,        "关闭",          menu_average_acb},
+4671:  { MT_ADV_CALLBACK, AV_MIN,        "MIN\nHOLD",    menu_average_acb},
+4672:  { MT_ADV_CALLBACK, AV_MAX_HOLD,   "MAX\nHOLD",    menu_average_acb},
+4673:  { MT_ADV_CALLBACK, AV_MAX_DECAY,  "MAX\nDECAY",   menu_average_acb},
+4674:  { MT_ADV_CALLBACK, AV_4,          "平均4",       menu_average_acb},
+4675:  { MT_ADV_CALLBACK, AV_16,         "平均16",      menu_average_acb},
+4677:  { MT_ADV_CALLBACK, AV_100,        "平均",     menu_average_acb},
+4680:  { MT_ADV_CALLBACK, AV_QUASI,      "QUASI\nPEAK",  menu_average_acb},
+4683:  { MT_ADV_CALLBACK, AV_TABLE,      "TABLE"S_RARROW"\nTRACE",  menu_average_acb},
+4689:  { MT_ADV_CALLBACK, 0, "  AUTO",   menu_rbw_acb},
+4691:  { MT_ADV_CALLBACK|MT_REPEATS, DATA_STARTS_REPEATS(1,9), "%sHz",   menu_rbw_acb},
+4693:  { MT_ADV_CALLBACK | MT_REPEATS, DATA_STARTS_REPEATS(1,6), "%4dkHz",   menu_rbw_acb},
+4701:  { MT_ADV_CALLBACK, 0, "     AUTO",   menu_vbw_acb},
+4702:  { MT_ADV_CALLBACK|MT_REPEATS, DATA_STARTS_REPEATS(1,5), "%b.2f RBW",   menu_vbw_acb},
+4708:  { MT_FORM | MT_ADV_CALLBACK|MT_REPEATS,  DATA_STARTS_REPEATS(0,8), "%s", menu_reffer_acb},
+4713:  { MT_ADV_CALLBACK,          0,           "%s",    menu_atten_acb},
+4714:  { MT_KEYPAD | MT_LOW,   KM_ATTENUATION,  "MANUAL\n\b%s",  "0 - 30dB"},
+4715://  { MT_ADV_CALLBACK | MT_HIGH,0,           "0dB",     menu_atten_high_acb},
+4716:  { MT_ADV_CALLBACK | MT_HIGH,30,          "22.5 - 40dB",    menu_atten_high_acb},
+4721:  { MT_ADV_CALLBACK,0,        "自动",    menu_reflevel_acb},
+4722:  { MT_KEYPAD,  KM_REFLEVEL,  "MANUAL\n\b%s",  NULL},
+4723:  { MT_CANCEL, 0,      S_LARROW" 返回", NULL },
+4728:  { MT_CALLBACK, 4, "PEAK\n SEARCH",          menu_marker_search_cb },
+4729:  { MT_CALLBACK, 0, "MIN\n" S_LARROW" LEFT",  menu_marker_search_cb },
+4730:  { MT_CALLBACK, 1, "MIN\n" S_RARROW" RIGHT", menu_marker_search_cb },
+4731:  { MT_CALLBACK, 2, "MAX\n" S_LARROW" LEFT",  menu_marker_search_cb },
+4732:  { MT_CALLBACK, 3, "MAX\n" S_RARROW" RIGHT", menu_marker_search_cb },
+4733:  { MT_ADV_CALLBACK, 0, "ENTER\n%s",          menu_enter_marker_acb},
+4734:  { MT_ADV_CALLBACK, M_TRACKING,    "跟踪",menu_marker_modify_acb },
+4736:  { MT_ADV_CALLBACK, 0,    "JOG JUMP\nMAX",menu_jog_jump_acb },
+4737:  { MT_KEYPAD,   KM_NOISE,      "PEAK\n\b%s",   "2..120 dB"},
+4743:  { MT_ADV_CALLBACK, 0,            "标记 %s",      menu_marker_modify_acb},
+4744:  { MT_ADV_CALLBACK, M_DELTA,       "差值 %s",    menu_marker_modify_acb},
+4745:  { MT_ADV_CALLBACK, M_NOISE,       "噪声",    menu_marker_modify_acb},
+4746:  { MT_ADV_CALLBACK, M_TRACKING,    "跟踪", menu_marker_modify_acb},
+4747:  { MT_ADV_CALLBACK, M_STORED,      "轨迹 %s",   menu_marker_modify_acb},
+4748:  { MT_ADV_CALLBACK, M_AVER,      "TRACE\nAVERAGE",   menu_marker_modify_acb},
+4749:  { MT_SUBMENU,  0,                 "搜索",   menu_marker_search},
+4750:  { MT_CALLBACK, M_DELETE,          "删除",   menu_marker_delete_cb},
+4757: { MT_ADV_CALLBACK, 255,                            "TRIGGER\nLEVEL",       menu_trigger_level_acb},
+4758: { MT_ADV_CALLBACK|MT_REPEATS,DATA_STARTS_REPEATS(0,TRACES_MAX),"TRIGGER\nTRACE %d",  menu_trigger_level_acb},
+4767:  { MT_KEYPAD,   KM_LIMIT_FREQ,   "FREQUENCY\n\b%s",          "Frequency"},
+4768:  { MT_KEYPAD,   KM_LIMIT_LEVEL,  "LEVEL\n\b%s",              "Level"},
+4769:  { MT_CALLBACK, 0,               "禁用",            menu_limit_disable_cb},
+4776:  { MT_CALLBACK,    FMT_TBL_FILE,  "TABLE"S_RARROW"\nSD",     menu_sdcard_cb},
+4778:  { MT_CALLBACK, FMT_TBL_FILE, "SD"S_RARROW"\nTABLE",            menu_sdcard_browse_cb },
+4788: { MT_KEYPAD,  KM_BAND_START,     "START\n\b%s",          "Start"},
+4789: { MT_KEYPAD,  KM_BAND_END,       "STOP\n\b%s",           "Stop"},
+4790: { MT_KEYPAD,  KM_BAND_CENTER,    "CENTER\n\b%s",         "Center"},
+4791: { MT_KEYPAD,  KM_BAND_SPAN,      "SPAN\n\b%s",           "Span"},
+4792: { MT_KEYPAD,  KM_BAND_LEVEL,     "LEVEL\n\b%s",          "Level"},
+4793: { MT_KEYPAD,  KM_BAND_NAME,      "NAME\n\b%s",           "Name"},
+4794:  { MT_CALLBACK,0,                 "禁用",              menu_BAND_disable_cb},
+4800:  { MT_ADV_CALLBACK,                0                               , "交替",  menu_multi_trace_acb },
+4802:  { MT_CALLBACK,    FMT_BND_FILE,  "BANDS"S_RARROW"\nSD",     menu_sdcard_cb},
+4804:  { MT_CALLBACK, FMT_BND_FILE, "SD"S_RARROW"\nBANDS",            menu_sdcard_browse_cb },
+4813:  { MT_CALLBACK, 1, "标记 %d", menu_marker_sel_cb },
+4814:  { MT_CALLBACK, 2, "标记 %d", menu_marker_sel_cb },
+4815:  { MT_CALLBACK, 3, "标记 %d", menu_marker_sel_cb },
+4816:  { MT_CALLBACK, 4, "标记 %d", menu_marker_sel_cb },
+4817://  { MT_CALLBACK, 0, "ALL OFF", menu_marker_sel_cb },
+4818:  { MT_CALLBACK, 0, "DELTA", menu_marker_sel_cb },
+4819:  { MT_CALLBACK, 0, "噪声", menu_marker_sel_cb },
+4820:  { MT_CALLBACK, 0, "跟踪", menu_marker_sel_cb },
+4826:  { MT_ADV_CALLBACK|MT_REPEATS, DATA_STARTS_REPEATS(1,MARKER_COUNT), "标记 %d", menu_marker_select_acb },
+4831:  { MT_ADV_CALLBACK|MT_REPEATS, DATA_STARTS_REPEATS(1,MARKER_COUNT), S_RARROW"标记 %d", menu_marker_ref_select_acb },
+4836:  { MT_CALLBACK, ST_START,  S_RARROW" START",    menu_marker_op_cb },
+4837:  { MT_CALLBACK, ST_STOP,   S_RARROW" STOP",     menu_marker_op_cb },
+4838:  { MT_CALLBACK, ST_CENTER, S_RARROW" CENTER",   menu_marker_op_cb },
+4839:  { MT_CALLBACK, ST_SPAN,   S_RARROW" SPAN",     menu_marker_op_cb },
+4840:  { MT_CALLBACK, 4,         S_RARROW" REF LEVEL",menu_marker_op_cb },
+4845://  { MT_SUBMENU,  0, "SELECT\nMARKER",     menu_marker_sel},
+4846:  { MT_SUBMENU,         0, "MODIFY\nMARKERS",       menu_marker_modify},
+4847:  { MT_SUBMENU,         0, "MARKER\nOPS",           menu_marker_ops},
+4848:  { MT_SUBMENU,         0, "SEARCH\nMARKER",        menu_marker_search},
+4849:  { MT_ADV_CALLBACK,    1, "RESET\nMARKERS",        menu_markers_reset_acb},
+4850:  { MT_ADV_CALLBACK,    2, "%d 个标记",            menu_markers_reset_acb},
+4851:  { MT_ADV_CALLBACK,    4, "%d 个标记",            menu_markers_reset_acb},
+4853:  { MT_ADV_CALLBACK,    6, "%d 个标记",            menu_markers_reset_acb},
+4854:  { MT_ADV_CALLBACK,    8, "%d 个标记",            menu_markers_reset_acb},
+4861:  { MT_FORM | MT_CALLBACK, 0, "进入 DFU",      menu_dfu_cb},
+4869:  { MT_ADV_CALLBACK, 0,   "关闭",              menu_harmonic_acb},
+4881:// { MT_ADV_CALLBACK,     SD_NORMAL,  "正常",           menu_scanning_speed_acb},    // order must match definition of enum
+4883:// { MT_ADV_CALLBACK | MT_LOW,SD_FAST,  "快速",           menu_scanning_speed_acb},
+4884:// { MT_KEYPAD   | MT_LOW,KM_FAST_SPEEDUP,    "FAST\nSPEEDUP",   "2..20"},
+4885:  { MT_KEYPAD, KM_SAMPLETIME,        "SDELAY\n\b%s",   "250..10000, 0=auto"},              // This must be item 4 to match highlighting
+4886:  { MT_KEYPAD, KM_OFFSET_DELAY,      "ODELAY\n\b%s",   "250..10000, 0=auto"},              // This must be item 5 to match highlighting
+4892:  { MT_ADV_CALLBACK|MT_REPEATS, DATA_STARTS_REPEATS(0,6), "%3d point", menu_points_acb },
+4894:  { MT_ADV_CALLBACK|MT_REPEATS, DATA_STARTS_REPEATS(0,4), "%3d point", menu_points_acb },
+4901:  { MT_FORM|MT_ADV_CALLBACK|MT_REPEATS, DATA_STARTS_REPEATS(0,6), "%3d point", menu_points_acb },
+4903:  { MT_FORM|MT_ADV_CALLBACK|MT_REPEATS, DATA_STARTS_REPEATS(0,4), "%3d point", menu_points_acb },
+4910: { MT_ADV_CALLBACK,     SD_NORMAL,     "正常",          menu_scanning_speed_acb},    // order must match definition of enum
+4911: { MT_ADV_CALLBACK,     SD_PRECISE,    "精确",         menu_scanning_speed_acb},
+4913: { MT_ADV_CALLBACK,     SD_FAST,        "快速",            menu_scanning_speed_acb},
+4915: { MT_ADV_CALLBACK | MT_LOW,SD_FAST,   "快速",            menu_scanning_speed_acb},
+4917: { MT_ADV_CALLBACK,     SD_NOISE_SOURCE,      "NOISE\nSOURCE",   menu_scanning_speed_acb},
+4918: { MT_KEYPAD,           KM_FAST_SPEEDUP,"NSPEEDUP\n\b%s",  "2..20, 0=disable"},
+4919: { MT_KEYPAD,           KM_FASTER_SPEEDUP,"WSPEEDUP\n\b%s",  "2..20, 0=disable"},
+4926:  { MT_CALLBACK, 1,               "STORE\nTINYSA NF",       menu_noise_figure_confirm_cb },
+4927:  { MT_CALLBACK, 0,               "取消",   menu_noise_figure_confirm_cb },
+4936: { MT_ADV_CALLBACK,     0,              "30MHz\nLEVEL", menu_output_level_acb},
+4937: { MT_ADV_CALLBACK,     0,              "1GHz\nLEVEL", menu_output_level2_acb},
+4938: { MT_ADV_CALLBACK,     0,              "1.2GHz\nLEVEL", menu_output_level3_acb},
+4939:// { MT_ADV_CALLBACK,     1,              "1.2GHz MIXER\nLEVEL", menu_output_level3_acb},       // Uses normal output level offset
+4955:  { MT_FORM | MT_SUBMENU,      0,  S_RARROW" MORE",     menu_curve3},
+4968:  { MT_FORM | MT_SUBMENU,      0,  S_RARROW" MORE",     menu_curve2},
+4973:  { MT_CALLBACK, 1,               "确定",       menu_curve_confirm_cb },
+4974:  { MT_CALLBACK, 0,               "取消",   menu_curve_confirm_cb },
+4992: { MT_CALLBACK,     CORRECTION_LOW_IN,      "IN\nCURVE",            menu_input_curve_prepare_cb},
+4993: { MT_CALLBACK,     CORRECTION_LNA,         "IN LNA\nCURVE",        menu_input_curve_prepare_cb},
+4994: { MT_CALLBACK,     CORRECTION_LOW_ULTRA,   "IN ULTRA\nCURVE",      menu_input_curve_prepare_cb},
+4995: { MT_CALLBACK,     CORRECTION_LNA_ULTRA,   "IN ULTRA\nLNA CURVE",  menu_input_curve_prepare_cb},
+4996: { MT_CALLBACK,     CORRECTION_DIRECT,      "IN DIRECT\nCURVE",     menu_input_curve_prepare_cb},
+4997: { MT_CALLBACK,     CORRECTION_LNA_DIRECT,  "IN DIRECT\nLNA CURVE", menu_input_curve_prepare_cb},
+4998: { MT_CALLBACK,     CORRECTION_HARM,        "IN HARM\nCURVE",       menu_input_curve_prepare_cb},
+4999: { MT_CALLBACK,     CORRECTION_LNA_HARM,    "IN HARM\nLNA CURVE",   menu_input_curve_prepare_cb},
+5006: { MT_CALLBACK,     CORRECTION_LOW_OUT,         "OUT\nCURVE",       menu_output_curve_prepare_cb},
+5007: { MT_CALLBACK,     CORRECTION_LOW_OUT_DIRECT,  "OUT DIR\nCURVE",   menu_output_curve_prepare_cb},
+5008: { MT_CALLBACK,     CORRECTION_LOW_OUT_ADF,     "OUT ADF\nCURVE",   menu_output_curve_prepare_cb},
+5009: { MT_CALLBACK,     CORRECTION_LOW_OUT_MIXER,   "OUT MIXER\nCURVE", menu_output_curve_prepare_cb},
+5018: { MT_KEYPAD,           KM_ACTUALPOWER, "INPUT\nLEVEL",  "Enter actual level under marker"},
+5020: { MT_SUBMENU,      0,                  "OUTPUT\nLEVEL", menu_actual_power2},
+5022: { MT_ADV_CALLBACK,     0,              "OUTPUT\nLEVEL", menu_output_level_acb},
+5026: { MT_SUBMENU,      0,                  "INPUT\nCURVES", menu_actual_in_power},
+5027: { MT_SUBMENU,      0,                  "OUTPUT\nCURVES", menu_actual_out_power},
+5030: { MT_CALLBACK,     CORRECTION_LOW_IN,  "IN LOW\nCURVE",    menu_input_curve_prepare_cb},
+5031: { MT_CALLBACK,     CORRECTION_HIGH_IN, "IN HIGH\nCURVE",   menu_input_curve_prepare_cb},
+5032: { MT_CALLBACK,     CORRECTION_LOW_OUT, "OUT LOW\nCURVE",   menu_output_curve_prepare_cb},
+5033:// { MT_CALLBACK,     CORRECTION_HIGH_OUT,"OUT HIGH\nCURVE", menu_output_curve_prepare_cb},
+5046: { MT_ADV_CALLBACK,     0,     "DEBUG\nFREQ",          menu_debug_freq_acb},
+5047: { MT_ADV_CALLBACK,     0,     "DEBUG\nAVOID",          menu_debug_avoid_acb},
+5048: { MT_ADV_CALLBACK,     0,     "DEBUG\nSPUR",        menu_debug_spur_acb},
+5049: { MT_ADV_CALLBACK,     0,     "DEBUG\nLEVEL",        menu_debug_level_acb},
+5050: { MT_ADV_CALLBACK,     0,     "HIDE\n21MHz",        menu_hide_21MHz_acb},
+5051: { MT_KEYPAD,           KM_OVERCLOCK,  "OVERCLOCK\n\b%s", "Enter overclock amount"},
+5054:  { MT_KEYPAD,   KM_COR_AM,     "COR\nAM", "Enter AM modulation correction"},
+5055:  { MT_KEYPAD,   KM_COR_WFM,     "COR\nWFM", "Enter WFM modulation correction"},
+5056:  { MT_KEYPAD,   KM_COR_NFM,     "COR\nNFM", "Enter NFM modulation correction"},
+5058://  { MT_CALLBACK,        0 ,     "CLEAR\nCONFIG",    menu_clearconfig_cb},
+5059://  { MT_SUBMENU,  0,             S_RARROW" MORE",     menu_settings3},
+5060:  { MT_KEYPAD,   KM_DIRECT_START,     "DSTART\n\b%s", ""},
+5061:  { MT_KEYPAD,   KM_DIRECT_STOP,     "DSTOP\n\b%s", ""},
+5068://  { MT_KEYPAD,   KM_GRIDLINES,  "MINIMUM\nGRIDLINES", "Enter minimum horizontal grid divisions, 0 is always 10"},
+5070:  { MT_ADV_CALLBACK,     0,     "ADF OUT",          menu_adf_out_acb},
+5072:  { MT_KEYPAD,   KM_ULTRA_START,"ULTRASTART\n\b%s",   "10G=auto"},
+5073:  { MT_KEYPAD,   KM_HARM_START,"HARM START\n\b%s",    "0=auto"},
+5074://  { MT_KEYPAD | MT_LOW, KM_IF2,  "IF2 FREQ",           "Set to zero for no IF2"},
+5075:  { MT_KEYPAD,  KM_R,  "R\n\b%s",           "Set R"},
+5076:  { MT_KEYPAD,  KM_MOD,  "MODULO\n\b%s",           "Set MODULO"},
+5077:  { MT_KEYPAD,  KM_CP,  "CP",             "Set CP"},
+5079:  { MT_ADV_CALLBACK,     0,     "SLEEP\nWAIT",    menu_sleep_acb},
+5082:  { MT_SUBMENU          ,0,               "谐波",         menu_harmonic},
+5084://  { MT_ADV_CALLBACK | MT_LOW, 0,    "ULTRA\nMODE",      menu_settings_ultra_acb},
+5085:  { MT_SUBMENU,  0,             S_RARROW" MORE",     menu_settings4},
+5088:  { MT_ADV_CALLBACK,     0,     "ENABLE\nULTRA",    menu_ultra_acb},
+5089:  { MT_KEYPAD,   KM_ULTRA_START,        "ULTRA\nSTART",   "Enter ULTRA mode start freq"},
+5090:  { MT_ADV_CALLBACK,     0,     "DEBUG\nSPUR",        menu_debug_spur_acb},
+5093:  { MT_SUBMENU | MT_HIGH,0,               "谐波",         menu_harmonic},
+5094://  { MT_ADV_CALLBACK,0,          "SPUR\nREMOVAL",          menu_harmonic_spur_acb},
+5103:  { MT_ADV_CALLBACK, 0,             "AGC",           menu_settings_agc_acb},
+5104:  { MT_ADV_CALLBACK, 0,             "LNA",           menu_settings_lna_acb},
+5105:  { MT_ADV_CALLBACK | MT_LOW, 0,    "带通滤波",           menu_settings_bpf_acb},
+5106:  { MT_ADV_CALLBACK | MT_LOW, 0,    "IF以下",      menu_settings_below_if_acb},
+5107:  { MT_KEYPAD | MT_LOW, KM_IF,  "IF FREQ\n\b%s",           "0=auto IF"},
+5110:  { MT_KEYPAD,   KM_DECAY,      "DECAY\n\b%s",   "0..1000000ms or sweeps"},
+5111:  { MT_KEYPAD,   KM_ATTACK,      "ATTACK\n\b%s",   "0..100000ms"},
+5114:  { MT_SUBMENU,0,               "SCAN\nSPEED",        menu_scanning_speed},
+5116:  { MT_SUBMENU | MT_LOW,0,      "MIXER\nDRIVE",      menu_mixer_drive},
+5117:  { MT_SUBMENU,  0,             S_RARROW" MORE",     menu_settings3},
+5119:  { MT_SUBMENU | MT_LOW,0,      "MIXER\nDRIVE",      menu_lo_drive},
+5120:  { MT_KEYPAD,   KM_10MHZ,      "CORRECT\nFREQUENCY", "Enter actual l0MHz frequency"},
+5128:  { MT_ADV_CALLBACK,0,              "PROGRESS\nBAR",        menu_progress_bar_acb},
+5129:  { MT_ADV_CALLBACK,     0,         "DIRECT\nMODE",         menu_direct_acb},
+5130:  { MT_ADV_CALLBACK,     0,         "LINEAR\nAVERAGING",    menu_linear_averaging_acb},
+5131:  { MT_ADV_CALLBACK,     0,         "AUDIO\nAGC",           menu_audio_agc_acb},
+5133:  { MT_SUBMENU          ,0,         "谐波",             menu_harmonic},
+5135:  { MT_KEYPAD,      KM_FREQ_CORR,   "FREQ CORR\n\b%s",      "Enter ppb correction"},
+5136://  { MT_SUBMENU,     0,              "CALIBRATE\nHARMONIC",  menu_calibrate_harmonic},
+5138:  { MT_KEYPAD,      KM_NF,          "NF\n\b%s",             "Enter tinySA noise figure"},
+5141:  { MT_CALLBACK,    FMT_BIN_FILE,   "DUMP\nFIRMWARE",       menu_sdcard_cb},
+5144:  { MT_ADV_CALLBACK, 0,         "HAM\nBANDS",         menu_settings_ham_bands},
+5147:  { MT_CALLBACK,    0 ,             "LOAD\nCONFIG.INI",     menu_load_config_cb},
+5148://  { MT_CALLBACK,        1 ,       "LOAD\nSETTING.INI",    menu_load_config_cb},
+5150:  { MT_ADV_CALLBACK,     0,              "内部设置",            menu_internals_acb},
+5158: { MT_ADV_CALLBACK,            M_NF_TINYSA,         "MEASURE\nTINYSA NF",menu_measure_acb},
+5159: { MT_ADV_CALLBACK,            M_NF_STORE,          "STORE\nTINYSA NF",menu_measure_acb},
+5160: { MT_ADV_CALLBACK,            M_NF_VALIDATE,       "VALIDATE\nTINYSA NF",menu_measure_acb},
+5161: { MT_ADV_CALLBACK,            M_NF_AMPLIFIER,      "MEASURE\nAMP NF",menu_measure_acb},
+5167:  { MT_ADV_CALLBACK,            M_AM,           "AM",           menu_measure_acb},
+5168:  { MT_ADV_CALLBACK,            M_FM,           "FM",           menu_measure_acb},
+5169:  { MT_ADV_CALLBACK,            M_THD,          "THD",           menu_measure_acb},
+5171:  { MT_ADV_CALLBACK,            M_CP,           "CHANNEL\nPOWER",menu_measure_acb},
+5174:{ MT_ADV_CALLBACK | MT_LOW,   M_LINEARITY,  "线性",         menu_measure_acb},
+5177:{ MT_SUBMENU | MT_LOW,          0,            "NOISE\nFIGURE",    menu_measure_noise_figure},
+5180://{ MT_ADV_CALLBACK,            M_BANDS,          "MULTI\nBAND",    menu_measure_acb},
+5183:  { MT_ADV_CALLBACK,            M_DECONV,  "反卷积",         menu_measure_acb},
+5189:  { MT_ADV_CALLBACK,            M_OFF,        "关闭",            menu_measure_acb},
+5190:  { MT_ADV_CALLBACK,            M_IMD,        "谐波",       menu_measure_acb},
+5191:  { MT_ADV_CALLBACK,            M_OIP3,       "OIP3",           menu_measure_acb},
+5192:  { MT_ADV_CALLBACK,            M_PHASE_NOISE,"PHASE\nNOISE",   menu_measure_acb},
+5193:  { MT_ADV_CALLBACK,            M_SNR,        "信噪比",            menu_measure_acb},
+5194:  { MT_ADV_CALLBACK,            M_PASS_BAND,  "-3dB\nWIDTH",    menu_measure_acb},
+5195:  { MT_ADV_CALLBACK,            M_WIDTH,   "OCCUPIED\nWIDTH",menu_measure_acb},
+5196:  { MT_SUBMENU,  0,             S_RARROW" MORE",                menu_measure2},
+5204: { MT_FORM | MT_TITLE,      1, "Connect %sHz at -50 to -10dBm",  menu_calibrate_harmonic_acb},      // Titles can have advanced callback for title format
+5205:// { MT_FORM | MT_TITLE,      0, "Connect 5.34GHz at -50 to -10dBm",  NULL},
+5207:  { MT_FORM | MT_CALLBACK,   3, "校准",        menu_calibrate_cb},
+5215:  { MT_FORM | MT_TITLE,      0, "Connect 7.25GHz at -50 to -10dBm",  NULL},
+5217:  { MT_FORM | MT_CALLBACK,   3, "校准",        menu_calibrate_cb},
+5225:  { MT_FORM | MT_TITLE,      0, "Connect CAL and RF",  NULL},
+5227:  { MT_FORM | MT_CALLBACK,   1, "校准",        menu_calibrate_cb},
+5234:  { MT_FORM | MT_ADV_CALLBACK,  0, "CALIBRATE 100kHz to %sHz",  menu_calibrate_normal_acb},
+5235:  { MT_FORM | MT_ADV_CALLBACK,  0, "CALIBRATE above %sHz",   menu_calibrate_harmonic_acb},
+5236:  { MT_FORM | MT_CALLBACK,      2, "重置校准",         menu_calibrate_cb},
+5242:  { MT_FORM | MT_SUBMENU,   1, "CALIBRATE 100kHz to 7.25GHz",   menu_calibrate_normal},
+5243:  { MT_FORM | MT_SUBMENU,   1, "CALIBRATE above 7.25GHz",       menu_calibrate_harmonic_max},
+5244:  { MT_FORM | MT_CALLBACK,   2, "重置校准",            menu_calibrate_cb},
+5252:  { MT_FORM | MT_TITLE,      0, "连接 HIGH 和 LOW",  NULL},
+5253:  { MT_FORM | MT_CALLBACK,   1, "校准",                 menu_calibrate_cb},
+5254:  { MT_FORM | MT_CALLBACK,   2, "重置校准",         menu_calibrate_cb},
+5263:  { MT_ADV_CALLBACK|MT_REPEATS, DATA_STARTS_REPEATS(0,10), "%u", menu_serial_speed_acb },
+5268:  { MT_ADV_CALLBACK, _MODE_USB,    "USB",    menu_connection_acb },
+5269:  { MT_ADV_CALLBACK, _MODE_SERIAL, "SERIAL", menu_connection_acb },
+5270:  { MT_SUBMENU,  0, "SERIAL\nSPEED", menu_serial_speed },
+5276:  { MT_CALLBACK, CONFIG_MENUITEM_TOUCH_CAL,  "触摸校准",  menu_config_cb},
+5277:  { MT_CALLBACK, CONFIG_MENUITEM_TOUCH_TEST, "触摸测试", menu_config_cb},
+5279:  { MT_CALLBACK, CONFIG_MENUITEM_NOTEPAD, "绘图板", menu_config_cb},
+5286:  { MT_KEYPAD, KM_RTC_TIME,  "SET TIME\n\b%s",                          0 },        // MUST BE BEFORE DATE
+5287:  { MT_KEYPAD, KM_RTC_DATE,  "SET DATE\n\b%s",                          0 },
+5294:  { MT_CALLBACK, 1, "LOCK\nDISPLAY", menu_lock_display_cb },
+5295:  { MT_CALLBACK, 0, "UNLOCK\nDISPLAY", menu_lock_display_cb },
+5302: { MT_ADV_CALLBACK,     0,     "PULSE\nHIGH",            menu_settings_pulse_acb},
+5303: { MT_ADV_CALLBACK | MT_LOW, 0,"低输出", menu_lo_output_acb},
+5305: { MT_ADV_CALLBACK,     0,     "ENABLE\nULTRA",    menu_ultra_acb},
+5307: { MT_KEYPAD,   KM_GRIDLINES,  "MINIMUM\nGRIDLINES", "Enter minimum horizontal grid divisions, 0 is always 10"},
+5308: { MT_KEYPAD,  KM_VAR,         "JOG STEP\n\b%s","0 = AUTO"},
+5309: { MT_CALLBACK,        0 ,     "CLEAR\nCONFIG",    menu_clearconfig_cb},
+5311: { MT_SUBMENU,          0, "连接", menu_connection},
+5313: { MT_SUBMENU,     0,              "LEVEL\nCORRECTION",    menu_actual_power},
+5315: { MT_SUBMENU,          0, "EXPERT\nCONFIG", menu_settings},
+5318:  { MT_ADV_CALLBACK, 0,         "HAM\nBANDS",         menu_settings_ham_bands},
+5320: { MT_SUBMENU,          0, "EXPERT\nCONFIG", menu_settings2},
+5326:  { MT_SUBMENU,  0,                        "触摸",     menu_touch},
+5327:  { MT_CALLBACK, CONFIG_MENUITEM_SELFTEST, "自检", menu_config_cb},
+5330:  { MT_CALLBACK, CONFIG_MENUITEM_CALIBRATE, "电平校准", menu_config_cb},
+5332:  { MT_SUBMENU,  0,                        "电平校准", menu_calibrate},
+5335:  { MT_CALLBACK, CONFIG_MENUITEM_VERSION,  "版本",   menu_config_cb},
+5337:  { MT_ADV_CALLBACK,0,          "%s",          menu_spur_acb},
+5339:  { MT_KEYPAD, KM_REPEAT,       "SAMPLE REP\n\b%s",    "1..10000"},
+5341:  { MT_ADV_CALLBACK, 0, "BRIGHTNESS\n \b%d%%", menu_brightness_acb},
+5344:  { MT_SUBMENU,  0, "DATE\nTIME", menu_date_time},
+5347:  { MT_SUBMENU,  0, S_RARROW" DFU",  menu_dfu},
+5349:  { MT_SUBMENU,  0, S_RARROW"MORE", menu_config2},
+5355: { MT_ADV_CALLBACK|MT_REPEATS,DATA_STARTS_REPEATS(0,TRACES_MAX),          "轨迹 %d",        menu_trace_acb},
+5361: { MT_ADV_CALLBACK|MT_REPEATS,DATA_STARTS_REPEATS(0,TRACES_MAX),          "轨迹 %d",        menu_marker_trace_acb},
+5379: { MT_ADV_CALLBACK,0,          "轨迹 %d",                  menu_traces_acb},
+5380: { MT_ADV_CALLBACK,1,          "启用",                    menu_traces_acb},
+5381: { MT_ADV_CALLBACK,2,          "冻结",                    menu_traces_acb},
+5383: { MT_ADV_CALLBACK,4,          "归一化",                 menu_traces_acb},
+5385: { MT_SUBMENU,     0,          "TRACE\n"S_RARROW"TRACE",    menu_store_trace},
+5387: { MT_ADV_CALLBACK,6,          "TRACE\n"S_RARROW"SD",       menu_traces_acb},
+5388: { MT_CALLBACK, FMT_CSV_FILE,  "SD"S_RARROW"\nTRACE",       menu_sdcard_browse_cb },
+5394:  { MT_ADV_CALLBACK,0,             "PAUSE\nSWEEP",    menu_pause_acb},
+5397:  { MT_ADV_CALLBACK,1,             "BIG\nNUMBER",     menu_level_meter_acb},
+5400:  { MT_ADV_CALLBACK,1,             "DRAW\nLINE",      menu_settings_draw_line_acb},
+5402:  { MT_KEYPAD,      KM_SWEEP_TIME, "SWEEP\nTIME",     "0..600s, 0=disable"},       // This must be item 3 to match highlighting
+5403:  { MT_SUBMENU,     0,             "SWEEP\nPOINTS",   menu_sweep_points},
+5404:  { MT_SUBMENU,     0,             "SWEEP\nACCURACY",  menu_sweep_speed},
+5405:  { MT_ADV_CALLBACK,0,             "ROTATE\nDISPLAY",    menu_flip_acb},
+5407:  { MT_SUBMENU,0,             "LOCK\nDISPLAY",    menu_lock_display},
+5410://  { MT_ADV_CALLBACK,0,          "SEND\nDISPLAY",    menu_send_display_acb},
+5412://  { MT_KEYPAD,  KM_SWEEP_TIME,  "SWEEP\nTIME",    NULL},
+5418:  { MT_ADV_CALLBACK,U_DBM,   "dBm",             menu_unit_acb},
+5419:  { MT_ADV_CALLBACK,U_DBV,   "dBV",             menu_unit_acb},
+5420:  { MT_ADV_CALLBACK,U_DBMV,  "dBmV",            menu_unit_acb},
+5421:  { MT_ADV_CALLBACK,U_DBUV,  "dB"S_MICRO"V",    menu_unit_acb},
+5422:  { MT_ADV_CALLBACK,U_VOLT,  "Vrms",            menu_unit_acb},
+5423:  { MT_ADV_CALLBACK,U_VPP,   "Vpp",             menu_unit_acb},
+5424://{ MT_ADV_CALLBACK,U_UVOLT, S_MICRO"Volt",     menu_unit_acb},
+5425:  { MT_ADV_CALLBACK,U_WATT,  "Watt",            menu_unit_acb},
+5426://{ MT_ADV_CALLBACK,U_UWATT, S_MICRO"Watt",     menu_unit_acb},
+5428:  { MT_ADV_CALLBACK,U_RAW,   "RAW",             menu_unit_acb},
+5434:  { MT_ADV_CALLBACK, T_AUTO,     "自动",           menu_trigger_acb},
+5435:  { MT_ADV_CALLBACK, T_NORMAL,   "正常",         menu_trigger_acb},
+5436:  { MT_ADV_CALLBACK, T_SINGLE,   "SINGLE",         menu_trigger_acb},
+5437://  { MT_ADV_CALLBACK, T_DONE,     "READY",          menu_trigger_acb},
+5441:  { MT_KEYPAD,       KM_TRIGGER, "LEVEL\n\b%s", NULL},
+5444:  { MT_ADV_CALLBACK, T_UP,       "EDGE\nUP",       menu_trigger_acb},
+5445:  { MT_ADV_CALLBACK, T_DOWN,     "EDGE\nDOWN",     menu_trigger_acb},
+5447:  { MT_ADV_CALLBACK, T_UP,     "EDGE\n\b%s",     menu_trigger_acb},
+5449:  { MT_ADV_CALLBACK, T_MODE,     "TRIGGER\n\b%s",  menu_trigger_acb},
+5450:  { MT_KEYPAD,       KM_TRIGGER_GRID, "INTERVAL\n\b%ss", NULL},
+5452:  { MT_ADV_CALLBACK, T_BEEP,     "BEEP",       menu_trigger_acb},
+5455:  { MT_ADV_CALLBACK, T_AUTO_SAVE,     "AUTO SAVE",       menu_trigger_acb},
+5461:  { MT_SUBMENU, 0,              "REF LEVEL",    menu_reflevel},
+5462://{ MT_SUBMENU, 0,              "SCALE/DIV",    menu_scale_per},
+5463:  { MT_CALLBACK,0,              "SCALE/DIV",    menu_scale_cb},
+5464:  { MT_SUBMENU, 0,              "ATTENUATE",    menu_atten},
+5465://  { MT_SUBMENU,0,             "CALC",         menu_average},
+5466:  { MT_SUBMENU, 0,              "单位",         menu_unit},
+5467:  { MT_KEYPAD,  KM_EXT_GAIN,      "EXT GAIN\n\b%s",NULL},
+5469:  { MT_ADV_CALLBACK | MT_LOW ,0,"LNA",          menu_extra_lna_acb},
+5471:  { MT_SUBMENU,  0,             "触发",      menu_trigger},
+5473:  { MT_ADV_CALLBACK, 0,             "监听",       menu_listen_acb},
+5479:  { MT_KEYPAD,  KM_START,       "START\n\b%s",       NULL},
+5480:  { MT_KEYPAD,  KM_STOP,        "STOP\n\b%s",        NULL},
+5481:  { MT_KEYPAD,  KM_CENTER,      "CENTER\n\b%s",      NULL},
+5482:  { MT_KEYPAD,  KM_SPAN,        "SPAN\n\b%s",        NULL},
+5483:  { MT_KEYPAD,  KM_CW,          "零扫宽",   NULL},
+5485:  { MT_ADV_CALLBACK, 0,         "MULTI\nBAND",       menu_multi_band_acb},
+5487:  { MT_SUBMENU,0,               "RBW",         menu_rbw},
+5489:  { MT_SUBMENU,     0,             "VBW",             menu_vbw},
+5491:  { MT_ADV_CALLBACK,0,          "SHIFT\nFREQ", menu_shift_acb},
+5492:  { MT_CALLBACK, ST_CENTER, "MARKER\n"S_RARROW" CENTER",   menu_marker_op_cb },
+5498:  { MT_ADV_CALLBACK, 0,       "SAVE\nCAPTURE",     menu_sd_icon_save_capture_acb },
+5499:  { MT_ADV_CALLBACK, 0,       "SAVE\nTRACES",      menu_sd_icon_save_traces_acb },
+5504:  { MT_ADV_CALLBACK, 0,       "自动命名",              menu_autoname_acb },
+5505:  { MT_ADV_CALLBACK, 0,       "MHz\nCSV",               menu_mhz_csv_acb },
+5506:  { MT_SUBMENU,      0,       "SD CARD\nICON",          menu_storage_sd_icon },
+5512:  { MT_CALLBACK, FMT_BMP_FILE,      "LOAD\nCAPTURE",        menu_sdcard_browse_cb },
+5513:  { MT_CALLBACK, FMT_PRS_FILE,      "LOAD\nSETTINGS",       menu_sdcard_browse_cb },
+5514:  { MT_CALLBACK, FMT_CMD_FILE,      "LOAD\nCMD",             menu_sdcard_browse_cb },
+5515:  { MT_CALLBACK, FMT_CFG_FILE,      "LOAD\nCONFIG",          menu_sdcard_browse_cb },
+5517:  { MT_CALLBACK,    FMT_BMP_FILE,   "SAVE\nCAPTURE",        menu_sdcard_cb},
+5518:  { MT_CALLBACK,    FMT_PRS_FILE,   "SAVE\nSETTINGS",       menu_sdcard_cb},
+5519:  { MT_CALLBACK,    FMT_CFG_FILE,   "SAVE\nCONFIG",         menu_sdcard_cb},
+5520:  { MT_CALLBACK,    FMT_CSV_FILE,   "SAVE\nTRACES",         menu_save_traces_cb},
+5522:  { MT_CALLBACK,    0,              "USB\nDISK",            menu_usb_disk_cb},
+5524:  { MT_SUBMENU,     0,              "CONFIG",               menu_storage_config },
+5525://  { MT_KEYPAD,      KM_INTERVAL,    "INTERVAL\n\b%s",       NULL },
+5532://  { MT_FORM | MT_TITLE,                 0,                      "tinySA MODE",           NULL},
+5533:  { MT_FORM | MT_ADV_CALLBACK | MT_ICON,    I_LOW_INPUT+I_SA,       "频谱分析仪",      menu_mode_acb},
+5534:  { MT_FORM | MT_ADV_CALLBACK | MT_ICON,    I_LOW_OUTPUT+I_SINE,   "信号发生器",     menu_mode_acb},
+5535://  { MT_FORM | MT_ADV_CALLBACK | MT_ICON,    I_HIGH_OUTPUT+I_GEN,    "%s 到 HIGH 输出",    menu_mode_acb},
+5536:  { MT_FORM | MT_ADV_CALLBACK | MT_ICON,    I_CONNECT+I_GEN,        "校准输出：%s",   menu_sreffer_acb},
+5541://  { MT_FORM | MT_TITLE,                 0,                      "tinySA MODE",           NULL},
+5542:  { MT_FORM | MT_ADV_CALLBACK | MT_ICON,    I_LOW_INPUT+I_SA,       "%s 到 LOW 输入",      menu_mode_acb},
+5543:  { MT_FORM | MT_ADV_CALLBACK | MT_ICON,    I_HIGH_INPUT+I_SA,      "%s 到 HIGH 输入",     menu_mode_acb},
+5544:  { MT_FORM | MT_ADV_CALLBACK | MT_ICON,    I_LOW_OUTPUT+I_SINE,   "%s 到 LOW 输出",     menu_mode_acb},
+5545:  { MT_FORM | MT_ADV_CALLBACK | MT_ICON,    I_HIGH_OUTPUT+I_GEN,    "%s 到 HIGH 输出",    menu_mode_acb},
+5546:  { MT_FORM | MT_ADV_CALLBACK | MT_ICON,    I_CONNECT+I_GEN,        "校准输出：%s",   menu_sreffer_acb},
+5547://  { MT_SUBMENU,  0, "EXPERT\nCONFIG", menu_settings3},
+5548://  { MT_FORM | MT_CANCEL,   0, S_RARROW" 返回", NULL },
+5554:  { MT_ADV_CALLBACK,0,             "PAUSE",    menu_pause_acb},
+5555:  { MT_SUBMENU,  0, "PRESET",       menu_load_preset},
+5556:  { MT_SUBMENU,  0, "FREQUENCY",    menu_stimulus},
+5557:  { MT_SUBMENU,  0, "LEVEL",        menu_level},
+5558:  { MT_SUBMENU,  0, "TRACE",        menu_traces},
+5559:  { MT_SUBMENU,  0, "DISPLAY",      menu_display},
+5560:  { MT_SUBMENU,  0, "MARKER",       menu_marker},
+5561:  { MT_SUBMENU,  0, "MEASURE",      menu_measure},
+5563:  { MT_SUBMENU,  0, "STORAGE",      menu_storage},
+5565:  { MT_SUBMENU,  0, "CONFIG",       menu_config},
+5566:  { MT_SUBMENU,  0, "模式",         menu_mode},
+5595:  char *out_format = "%.3QHz";
+5601:      out_format = "%.6Q";
+5609:      out_format = "%.6Q";
+5618:        out_format = "%.9QHz";
+5620:        out_format = "%.6Q";
+5623:        out_format = "%.6Q";
+5632:      out_format = "%.6Q";
+5640:      out_format = "%.6Q";
+5647:    plot_printf(uistat.text, sizeof uistat.text, "%f/", uistat.value);
+5651:    plot_printf(uistat.text, sizeof uistat.text, "%.3F", uistat.value);
+5655:    plot_printf(uistat.text, sizeof uistat.text, "%ddB", ((int32_t)uistat.value));
+5659:    plot_printf(uistat.text, sizeof uistat.text, "%ddB", ((int32_t)uistat.value));
+5664:      plot_printf(uistat.text, sizeof uistat.text, "%.3QHz", uistat.freq_value);
+5666:      plot_printf(uistat.text, sizeof uistat.text, "自动");
+5671:    plot_printf(uistat.text, sizeof uistat.text, "%.3QHz", uistat.freq_value);
+5676:      plot_printf(uistat.text, sizeof uistat.text, "%d", setting.R);
+5678:      plot_printf(uistat.text, sizeof uistat.text, "自动");
+5682:      plot_printf(uistat.text, sizeof uistat.text, "%d", local_modulo);
+5684:      plot_printf(uistat.text, sizeof uistat.text, "自动");
+5688:    plot_printf(uistat.text, sizeof uistat.text, "%d",  ((int32_t)uistat.value));
+5694:      plot_printf(uistat.text, sizeof uistat.text, "%dus", ((int32_t)uistat.value));
+5696:      plot_printf(uistat.text, sizeof uistat.text, "自动");
+5700:    plot_printf(uistat.text, sizeof uistat.text, "%d", ((int32_t)uistat.value));
+5704:    plot_printf(uistat.text, sizeof uistat.text, "%d", ((int32_t)uistat.value));
+5708:    plot_printf(uistat.text, sizeof uistat.text, "%d", ((int32_t)uistat.value));
+5719:    char *u = "m";
+5722:      u = "uV";
+5727:      plot_printf(uistat.text, sizeof uistat.text, "%.1f to %.1fdBm", uistat.value, el);
+5730:      plot_printf(uistat.text, sizeof uistat.text, "%+.1fdB%s %s", uistat.value, u, (setting.disable_correction?"Uncorrected":""));
+5732:      plot_printf(uistat.text, sizeof uistat.text, "%+.1fdB%s", uistat.value, u);
+5738:    char *unit = "m";
+5740:      unit = "uV";
+5743:    plot_printf(uistat.text, sizeof uistat.text, "%+.1fdB%s", uistat.value, unit);
+5747:    plot_printf(uistat.text, sizeof uistat.text, "%d", ((int32_t)uistat.value));
+5752:    plot_printf(uistat.text, sizeof uistat.text, "%d", ((int32_t)uistat.value));
+5759:      plot_printf(uistat.text, sizeof uistat.text, "自动");
+5761:      plot_printf(uistat.text, sizeof uistat.text, "%.3QHz", uistat.freq_value );
+5765:    plot_printf(uistat.text, sizeof uistat.text, "%.3QHz",(config.harmonic_start?config.harmonic_start:ULTRA_MAX_FREQ) );
+5769:    plot_printf(uistat.text, sizeof uistat.text, "%.3QHz", uistat.freq_value);
+5773:    plot_printf(uistat.text, sizeof uistat.text, "%.3QHz", uistat.freq_value);
+5777:    plot_printf(uistat.text, sizeof uistat.text, "%.3QHz", uistat.freq_value);
+5783:    plot_printf(uistat.text, sizeof uistat.text, "%.3QHz", uistat.freq_value);
+5787:    plot_printf(uistat.text, sizeof uistat.text, "%.1f", uistat.value);
+5795:      out_format = "%.6Q";
+5803:      out_format = "%.6Q";
+5811:      out_format = "%.6Q";
+5819:      out_format = "%.6Q";
+5825:    plot_printf(uistat.text, sizeof uistat.text, "%.1f", uistat.value);
+5828:    plot_printf(uistat.text, sizeof uistat.text, "%s", setting.bands[active_band].name);
+5831:    plot_printf(uistat.text, sizeof uistat.text, "%s", setting.preset_name);
+5836:    plot_printf(uistat.text, sizeof uistat.text, "%d", ((int32_t)uistat.value));
+5845:    plot_printf(uistat.text, sizeof uistat.text, "%d", (int32_t)uistat.value);
+5850:    plot_printf(uistat.text, sizeof uistat.text, "%3.6fMHz", uistat.freq_value);
+5855:    plot_printf(uistat.text, sizeof uistat.text, "%.1fdB", uistat.value);
+5859:    plot_printf(uistat.text, sizeof uistat.text, "%.1fdB", uistat.value);
+5867:    plot_printf(uistat.text, sizeof uistat.text, "%.3Fs", uistat.value);
+5873:      format = "%.3F%s"; // 5 characters incl u, m, etc...
+5875:      format = "%.1f%s";
+5880:    plot_printf(uistat.text, sizeof uistat.text, "%.3F", uistat.value);
+5886:      plot_printf(uistat.text, sizeof uistat.text, "%.3QHz", uistat.freq_value);
+5892:      plot_printf(uistat.text, sizeof uistat.text, "%8.4FHz", uistat.value);
+5898:    plot_printf(uistat.text, sizeof uistat.text, "%.3QHz", uistat.freq_value);
+5902:    plot_printf(uistat.text, sizeof uistat.text, "%3d", (int)uistat.value);
+5908:      plot_printf(uistat.text, sizeof uistat.text, "%.4QHz", setting.frequency_var);
+5910:      plot_printf(uistat.text, sizeof uistat.text, "自动");
+5916:    plot_printf(uistat.text, sizeof uistat.text, "%.1fdB", uistat.value);
+5923:    plot_printf(uistat.text, sizeof uistat.text, "%02d:%02d:%02d",
+5932:    plot_printf(uistat.text, sizeof uistat.text, "%02d:%02d:%02d",
+5941:    plot_printf(uistat.text, sizeof uistat.text, "20%02d/%02d/%02d",
+6135:    plot_printf(setting.bands[active_band].name, sizeof setting.bands[active_band].name, "%s", kp_buf);
+6208:    plot_printf(setting.preset_name, sizeof setting.preset_name, "%s", kp_buf);
+6283:const char * const dBText[] = { "1dB/", "2dB/", "5dB/", "10dB/", "20dB/"};
+6309:const char * const unit_string[MAX_UNIT_TYPE*2] = { "dBm", "dBmV", "dB"S_MICRO"V", "RAW", "Vrms", "Vpp", "W", "dBV",
+6310:                                                    "dB",  "dB",   "dB",           "RAW", "Vrms", "Vpp", "W", "dB" }; // unit + MAX_UNIT_TYPE is delta unit
+6352:const char *month[] = { "Jan", "Feb", "Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec" };
+6375:      ili9341_drawstring("LEVEL\nERROR", 0 , 80);
+6379:      ili9341_drawstring("DEPTH\nERROR", 0 , 140);
+6399:    lcd_printf(x, y, "%+4d", (int)yMax);
+6401:    lcd_printf(x, y, "%+4.3F", (yMax/setting.unit_scale));
+6410:    ili9341_drawstring("自动", x, y);
+6413:  lcd_printf(x, y, "%c%s", unit_scale_text[setting.unit_scale_index], unit);
+6423:      lcd_printf(x, y, "%s%c/",scale_vtext[i],unit_scale_text[setting.unit_scale_index]);
+6429:  lcd_printf(x, y, "%.2F/",setting.scale);
+6436:    ili9341_drawstring("已暂停", x, y);
+6441:    ili9341_drawstring("已准备", x, y);
+6447:    ili9341_drawstring("AM", x, y);
+6455:    lcd_printf(x, y, "MULTI");
+6477:    lcd_printf(x, y, "Atten:\n%4.2FdB", attenuation);
+6484:    lcd_printf(x, y, "Calc:\n%s", averageText[setting.average[0]]);
+6492:    lcd_printf(x, y, "Spur:\n%s", S_IS_AUTO(setting.spur_removal) ? "AUTO" : (setting.spur_removal == S_OFF ?"OFF" : "ON"));
+6499:    ili9341_drawstring("Mask:\nON", x, y);
+6506:    ili9341_drawstring("标准", x, y);
+6513:  lcd_printf(x, y, "RBW:\n%.1FHz", actual_rbw_x10*100.0);
+6527:    lcd_printf(x, y, "VBW:\n%.1FHz", actual_rbw_x10*100.0 / vbw);
+6538:  lcd_printf(x, y, "%cScan:\n%5.3Fs", fscan[setting.step_delay_mode&7], (float)setting.sweep_time_us/ONE_SECOND_TIME);
+6541:  lcd_printf(x, y, "%cScan:", fscan[setting.step_delay_mode&7]);
+6543:  lcd_printf(x, y+YSTEP, "%5.3Fs",(float)setting.actual_sweep_time_us/ONE_SECOND_TIME);
+6552:  lcd_printf(x, y, "%5.3Fs", (float)t/ONE_SECOND_TIME);
+6554:  lcd_printf(x, y, "%5.3Fs", (float)setting.additional_step_delay_us/ONE_SECOND_TIME);
+6560:    lcd_printf(x, y, "LNA:ON");
+6567:    lcd_printf(x, y, "Ultra:\n%3QHz", ultra_start);
+6573:    lcd_printf(x, y, "Corr:\nOFF");
+6579:    lcd_printf(x, y, "Path:\n%s", path_text[signal_path+(LO_harmonic?1:0)]);
+6587:    lcd_printf(x, y, "Ref:\n%dMHz",reffer_freq[setting.refer]/1000000);
+6594:    lcd_printf(x, y, "Gain:\n%4.1fdB",setting.external_gain);
+6601:    lcd_printf(x, y, "Repeat\n x%d", setting.repeat);
+6612:    ili9341_drawstring("触发：", x, y);
+6616:      lcd_printf(x, y, "%6.1f", value(setting.trigger_level));
+6618:      lcd_printf(x, y, "%6.4F", value(setting.trigger_level));
+6619://    lcd_printf(x, y, "%4f", value(setting.trigger_level)/setting.unit_scale);
+6625:  ili9341_drawstring_7x13(MODE_LOW(setting.mode) ? "低" : "高", x, y);
+6691:  lcd_printf(x, y,  "20%02d/\n%s/%02d", RTC_DR_YEAR(dr), month[RTC_DR_MONTH(dr)-1], RTC_DR_DAY(dr));
+6694:  lcd_printf(x, y,  "%02d:%02d", RTC_TR_HOUR(dr), RTC_TR_MIN(dr));
+6721:      lcd_printf(x, y, "%4d", (int)(yMax - setting.scale * NGRIDY));
+6723:      lcd_printf(x, y, "%+4.3F", ((yMax - setting.scale * NGRIDY)/setting.unit_scale));
+6894:        kp_help_text = VARIANT("0..350MHz",range_text);
+6896:        kp_help_text = VARIANT("0..720Mhz",range_text);
+6898:        kp_help_text = VARIANT("240..960Mhz",range_text);
+7237:          lcd_printf(button_start+12 + 0 * MENU_FORM_WIDTH/5, y+button_height-9, "%+3.0FHz", -(float)setting.slider_span);
+7238:          lcd_printf(button_start+12 + 1 * MENU_FORM_WIDTH/5, y+button_height-9, "%+3.0FHz", -(float)setting.slider_span/10);
+7239:          lcd_printf(button_start+12 + 2 * MENU_FORM_WIDTH/5, y+button_height-9, "Set");
+7240:          lcd_printf(button_start+12 + 3 * MENU_FORM_WIDTH/5, y+button_height-9, "%+3.0FHz",  (float)setting.slider_span/10);
+7241:          lcd_printf(button_start+12 + 4 * MENU_FORM_WIDTH/5, y+button_height-9, "%+3.0FHz",  (float)setting.slider_span);
+7244:          lcd_printf(button_start+12 + 0 * MENU_FORM_WIDTH/5, y+button_height-9, "%+ddB", -10);
+7245:          lcd_printf(button_start+12 + 1 * MENU_FORM_WIDTH/5, y+button_height-9, "%+ddB",  -1);
+7246:          lcd_printf(button_start+12 + 2 * MENU_FORM_WIDTH/5, y+button_height-9, "Set");
+7247:          lcd_printf(button_start+12 + 3 * MENU_FORM_WIDTH/5, y+button_height-9, "%+ddB",   1);
+7248:          lcd_printf(button_start+12 + 4 * MENU_FORM_WIDTH/5, y+button_height-9, "%+ddB",  10);
+7394:          plot_printf(center_text, sizeof center_text, "RANGE: %%s");
+7399:          plot_printf(center_text, sizeof center_text, "FREQ: %%s");
+8129://  shell_printf("S file\r\n");
+8131://  shell_printf("Mount = %d\r\n", res);
+8135://  shell_printf("Open %s, = %d\r\n", fs_filename, res);
+8146:    drawMessageBox("Warning:", "Restart tinySA to use SD card", 2000);
+8156:    plot_printf(fs_filename, FF_LFN_BUF, "SA_%06x_%06x.%s", dr, tr, file_ext[format]);
+8158:    plot_printf(fs_filename, FF_LFN_BUF, "%08x.%s", rtc_get_FAT(), file_ext[format]);
+8170:      int ext = strlen(file_ext[format]) + 1;             // ".prs"
+8178:    plot_printf(fs_filename, FF_LFN_BUF, "%s.%s", kp_buf, file_ext[format]);
+8222:              buf += plot_printf(buf, 100, "%.6f,", ((float)getFrequency(i))/1000000);
+8224:              buf += plot_printf(buf, 100, "%U,", getFrequency(i));
+8226:          if (file_mask & 2)  buf += plot_printf(buf, 100, "%.3f", value(measured[TRACE_ACTUAL][i]));
+8227:          if (file_mask & 4)  buf += plot_printf(buf, 100, " %.3f", value(measured[TRACE_STORED][i]));
+8228:          if (file_mask & 8)  buf += plot_printf(buf, 100, " %.3f", value(measured[TRACE_STORED2][i]));
+8229:          if (file_mask & 16) buf += plot_printf(buf, 100, " %.3f", value(measured[TRACE_TEMP][i]));
+8230:          buf += plot_printf(buf, 100, "\r\n");
+8238:            buf += plot_printf(buf, 100, "%U, ", setting.limits[current_trace][i].frequency);
+8239:            buf += plot_printf(buf, 100, "%f ", setting.limits[current_trace][i].level);
+8240:            buf += plot_printf(buf, 100, "\r\n");
+8250:            buf += plot_printf(buf, 100, "%U, ", setting.bands[i].start);
+8251:            buf += plot_printf(buf, 100, "%U, ", setting.bands[i].end);
+8252:            buf += plot_printf(buf, 100, "%f ", setting.bands[i].level);
+8253:            buf += plot_printf(buf, 100, "\r\n");
+8307://    shell_printf("Close = %d\r\n", res);
+8310://    shell_printf("Total time: %dms (write %d byte/sec)\r\n", time/10, total_size*10000/time);
+8313:  drawMessageBox("SD CARD SAVE", res == FR_OK ? fs_filename : "  Fail write  ", 2000);
